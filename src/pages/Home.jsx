@@ -23,11 +23,17 @@ class Home extends React.Component {
     this.setState({ categories });
   };
 
+  onClick = async (id) => {
+    const queryData = await getProductsFromCategoryAndQuery(id);
+    console.log(queryData);
+    this.setState({ queryData: queryData.results });
+  }
+
   renderCategories = () => {
     const { categories } = this.state;
     return categories.map((data) => (
       <Button
-        onClick={ () => console.log('xablau') }
+        onClick={ () => this.onClick(data.id) }
         type="button"
         data-testid="category"
         key={ data.id }
@@ -41,7 +47,7 @@ class Home extends React.Component {
     const { inputSearch } = this.state;
     const queryData = await getProductsFromCategoryAndQuery('', inputSearch);
     this.setState({ queryData: queryData.results });
-    // console.log(fetchData.results);
+    // console.log(queryData);
   }
 
   renderCards = () => {
