@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getProductsFromCategoryAndQuery } from '../services/api';
+import { getProductsFromCategoryAndQuery, getCategories } from '../services/api';
 import Button from '../Components/Button';
 import CardItem from '../Components/CardItem';
 
@@ -10,8 +10,32 @@ class Home extends React.Component {
     this.state = {
       inputSearch: '',
       queryData: [],
+      categories: [],
     };
   }
+
+  componentDidMount() {
+    this.fetchCategories();
+  }
+
+  fetchCategories = async () => {
+    const categories = await getCategories();
+    this.setState({ categories });
+  };
+
+  renderCategories = () => {
+    const { categories } = this.state;
+    return categories.map((data) => (
+      <Button
+        onClick={ () => console.log('xablau') }
+        type="button"
+        data-testid="category"
+        key={ data.id }
+      >
+        {data.name}
+      </Button>
+    ));
+  };
 
   fetchAPI = async () => {
     const { inputSearch } = this.state;
@@ -59,12 +83,10 @@ class Home extends React.Component {
         >
           Search
         </button> */}
-        <Link
-          to="/cart"
-          data-testid="shopping-cart-button"
-        >
+        <Link to="/cart" data-testid="shopping-cart-button">
           Cart
         </Link>
+        <div>{this.renderCategories()}</div>
         { queryData.length ? this.renderCards() : <p>Nenhum produto foi encontrado</p> }
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
