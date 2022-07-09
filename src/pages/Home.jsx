@@ -25,7 +25,7 @@ class Home extends React.Component {
 
   onClick = async (id) => {
     const queryData = await getProductsFromCategoryAndQuery(id);
-    console.log(queryData);
+    // console.log(queryData);
     this.setState({ queryData: queryData.results });
   }
 
@@ -53,7 +53,7 @@ class Home extends React.Component {
   renderCards = () => {
     const { queryData } = this.state;
     const data = queryData;
-    console.log(queryData.results);
+    // console.log(queryData.results);
     return data.map((item) => <CardItem key={ item.id } data={ item } />);
   }
 
@@ -82,13 +82,6 @@ class Home extends React.Component {
         >
           Search
         </Button>
-        {/* <button
-          onClick={ this.fetchAPI }
-          type="button"
-          data-testid="query-button"
-        >
-          Search
-        </button> */}
         <Link to="/cart" data-testid="shopping-cart-button">
           Cart
         </Link>
