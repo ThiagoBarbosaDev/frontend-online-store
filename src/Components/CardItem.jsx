@@ -11,9 +11,6 @@ class CardItem extends React.Component {
 
   render() {
     const { data } = this.props;
-    // console.log(data.title);
-    // console.log(data.thumbnail);
-    // console.log(data.price);
     return (
 
       <div
