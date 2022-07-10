@@ -1,19 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../Components/Button';
 import { Link } from 'react-router-dom';
+import Button from '../Components/Button';
+import Input from '../Components/Input';
+import UserReview from '../Components/UserReview';
 
 class ItemDetails extends React.Component {
   constructor() {
     super();
     this.state = {
       itemData: {},
+      email: '',
+      description: '',
+      rating: 1,
+      reviewData: [],
     };
   }
 
   componentDidMount() {
     const { match: { params: { id } } } = this.props;
     this.fetchItemData(id);
+    this.getReviewData();
+  }
+
+  getReviewData = () => {
+    const reviewData = this.getCartData();
+    this.setState({ reviewData });
+  }
+
+  getCartData = () => {
+    if (!JSON.parse(localStorage.getItem('reviews'))) {
+      localStorage.setItem('reviews', JSON.stringify([]));
+    }
+    const getReviewData = () => JSON
+      .parse(localStorage.getItem('reviews'));
+    const existingCartData = getReviewData();
+    return existingCartData;
   }
 
   fetchItemData = async (id) => {
@@ -23,37 +45,108 @@ class ItemDetails extends React.Component {
     this.setState({ itemData: data });
   }
 
-  saveToCart = (newCartItemData) => {
-    if (!JSON.parse(localStorage.getItem('cartItems'))) {
-      localStorage.setItem('cartItems', JSON.stringify([]));
+  saveToCart = (key, newCartItemData) => {
+    if (!JSON.parse(localStorage.getItem(key))) {
+      localStorage.setItem(key, JSON.stringify([]));
     }
-    const getCartData = () => JSON.parse(localStorage.getItem('cartItems'));
+    const getCartData = () => JSON.parse(localStorage.getItem(key));
     const existingCartData = getCartData();
     const saveCartData = () => localStorage
-      .setItem('cartItems', JSON.stringify([...existingCartData, newCartItemData]));
+      .setItem(key, JSON.stringify([...existingCartData, newCartItemData]));
     saveCartData();
   }
 
+  handleChange = ({ target: { name, value } }) => this.setState({ [name]: value });
+
+  handleClick = () => {
+    const { email, description, rating } = this.state;
+    this.setState((prvState) => ({
+      email: '',
+      description: '',
+      reviewData: [...prvState.reviewData, {
+        email,
+        description,
+        rating,
+      }],
+    }));
+    this.saveToCart('reviews', { email, description, rating });
+  }
+
+  renderRateButtons = () => {
+    const rating1 = 1;
+    const rating2 = 2;
+    const rating3 = 3;
+    const rating4 = 4;
+    const rating5 = 5;
+    const buttons = [rating1, rating2, rating3, rating4, rating5];
+    return buttons.map((rating) => (
+      <Button
+        dataTestId={ `${rating}-rating` }
+        type="button"
+        onClick={ () => this.setState({ rating }) }
+        key={ rating }
+      >
+        {rating}
+      </Button>
+    ));
+  }
+
+  renderReviewCards = () => {
+    const { reviewData } = this.state;
+    return reviewData
+      .map((review) => <UserReview data={ review } key={ review.email } />);
+  }
+
   render() {
-    const { itemData } = this.state;
+    const { itemData, email, description, reviewData } = this.state;
     return (
       <div>
-        <Link to="/cart" data-testid="shopping-cart-button">
-          Cart
-        </Link>
-        <h3 data-testid="product-detail-name">{ itemData.title }</h3>
-        <img
-          alt="Imagem produto"
-          src={ itemData.thumbnail }
-        />
-        <p>{ itemData.price }</p>
-        <Button
-          dataTestId="product-detail-add-to-cart"
-          type="button"
-          onClick={ () => this.saveToCart(itemData) }
-        >
-          Comprar
-        </Button>
+        <section>
+          <Link to="/cart" data-testid="shopping-cart-button">
+            Cart
+          </Link>
+          <h3 data-testid="product-detail-name">{ itemData.title }</h3>
+          <img
+            alt="Imagem produto"
+            src={ itemData.thumbnail }
+          />
+          <p>{ itemData.price }</p>
+          <Button
+            dataTestId="product-detail-add-to-cart"
+            type="button"
+            onClick={ () => this.saveToCart('cartItems', itemData) }
+          >
+            Comprar
+          </Button>
+        </section>
+        <form>
+          <Input
+            type="email"
+            name="email"
+            dataTestId="product-detail-email"
+            onChange={ this.handleChange }
+            value={ email }
+          >
+            Email:
+          </Input>
+          <textarea
+            name="description"
+            value={ description }
+            onChange={ this.handleChange }
+            data-testid="product-detail-evaluation"
+          />
+          { this.renderRateButtons() }
+          <Button
+            dataTestId="submit-review-btn"
+            type="button"
+            onClick={ this.handleClick }
+          >
+            Enviar
+          </Button>
+        </form>
+        <section>
+          {reviewData.length && this.renderReviewCards()}
+        </section>
       </div>
     );
   }
