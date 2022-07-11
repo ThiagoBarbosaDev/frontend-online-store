@@ -23,11 +23,11 @@ class ShoppingCartItem extends React.Component {
   }
 
   render() {
-    const { data } = this.props;
+    const { data: { title, price } } = this.props;
     const { quantity } = this.state;
     return (
       <li>
-        <p data-testid="shopping-cart-product-name">{ data.title }</p>
+        <p data-testid="shopping-cart-product-name">{ title }</p>
         <button
           data-testid="product-decrease-quantity"
           type="button"
@@ -43,7 +43,7 @@ class ShoppingCartItem extends React.Component {
         >
           +
         </button>
-        <p>{ data.price }</p>
+        <p>{ price }</p>
       </li>
     );
   }
