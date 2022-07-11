@@ -10,7 +10,8 @@ class ShoppingCartItem extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextState.quantity;
+    const { data: { available_quantity: qty } } = this.props;
+    return nextState.quantity && nextState.quantity <= qty;
   }
 
   increaseItem = () => {
@@ -52,6 +53,7 @@ ShoppingCartItem.propTypes = {
   data: PropTypes.shape({
     title: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    available_quantity: PropTypes.number.isRequired,
   }).isRequired,
 };
 
