@@ -73,13 +73,9 @@ class ItemDetails extends React.Component {
   }
 
   renderRateButtons = () => {
-    const rating1 = 1;
-    const rating2 = 2;
-    const rating3 = 3;
-    const rating4 = 4;
-    const rating5 = 5;
-    const buttons = [rating1, rating2, rating3, rating4, rating5];
-    return buttons.map((rating) => (
+    const maxRating = 5;
+    const buttonsValues = Array.from(Array(maxRating + 1).keys()).slice(1);
+    return buttonsValues.map((rating) => (
       <Button
         dataTestId={ `${rating}-rating` }
         type="button"
