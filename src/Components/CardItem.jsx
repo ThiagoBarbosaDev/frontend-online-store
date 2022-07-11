@@ -6,6 +6,7 @@ import Button from './Button';
 class CardItem extends React.Component {
   render() {
     const { data, onClick } = this.props;
+    const isShippingFree = data.shipping.free_shipping;
     return (
       <div data-testid="product">
         <Link
@@ -18,6 +19,7 @@ class CardItem extends React.Component {
             <p>{data.price}</p>
           </div>
         </Link>
+        { isShippingFree && <span data-testid="free-shipping"> Free Shipping!! </span>}
         <Button
           dataTestId="product-add-to-cart"
           type="button"
@@ -38,6 +40,7 @@ CardItem.propTypes = {
     title: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    shipping: PropTypes.shape({ free_shipping: PropTypes.bool.isRequired }),
   }).isRequired,
   onClick: PropTypes.func.isRequired,
 };
