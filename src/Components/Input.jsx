@@ -23,7 +23,6 @@ class Input extends React.Component {
 }
 
 Input.propTypes = {
-  label: PropTypes.string,
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   dataTestId: PropTypes.string,
@@ -37,7 +36,6 @@ Input.defaultProps = {
   checked: null,
   dataTestId: '',
   children: '',
-  label: '',
 };
 
 export default Input;
