@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class UserReview extends React.Component {
   render() {
-    const { data: { email, description, rating } } = this.props
+    const { data: { email, description, rating } } = this.props;
     return (
       <section>
         <p>
