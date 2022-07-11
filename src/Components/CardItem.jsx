@@ -4,19 +4,8 @@ import PropTypes from 'prop-types';
 import Button from './Button';
 
 class CardItem extends React.Component {
-  saveToCart = (newCartItemData) => {
-    if (!JSON.parse(localStorage.getItem('cartItems'))) {
-      localStorage.setItem('cartItems', JSON.stringify([]));
-    }
-    const getCartData = () => JSON.parse(localStorage.getItem('cartItems'));
-    const existingCartData = getCartData();
-    const saveCartData = () => localStorage
-      .setItem('cartItems', JSON.stringify([...existingCartData, newCartItemData]));
-    saveCartData();
-  }
-
   render() {
-    const { data } = this.props;
+    const { data, onClick } = this.props;
     return (
       <div data-testid="product">
         <Link
@@ -32,7 +21,7 @@ class CardItem extends React.Component {
         <Button
           dataTestId="product-add-to-cart"
           type="button"
-          onClick={ () => this.saveToCart(data) }
+          onClick={ () => onClick(data) }
         >
           Comprar
         </Button>
@@ -50,4 +39,5 @@ CardItem.propTypes = {
     thumbnail: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
+  onClick: PropTypes.func.isRequired,
 };

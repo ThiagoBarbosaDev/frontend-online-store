@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Button from '../Components/Button';
 import Input from '../Components/Input';
 import UserReview from '../Components/UserReview';
+import ShoppingCartIcon from '../Components/ShoppingCartIcon';
 
 class ItemDetails extends React.Component {
   constructor() {
@@ -98,9 +98,7 @@ class ItemDetails extends React.Component {
     return (
       <div>
         <section>
-          <Link to="/cart" data-testid="shopping-cart-button">
-            Cart
-          </Link>
+          <ShoppingCartIcon />
           <h3 data-testid="product-detail-name">{ itemData.title }</h3>
           <img
             alt="Imagem produto"

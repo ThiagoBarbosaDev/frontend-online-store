@@ -11,6 +11,7 @@ class Home extends React.Component {
       inputSearch: '',
       queryData: [],
       categories: [],
+      cartItems: 0,
     };
   }
 
@@ -25,7 +26,6 @@ class Home extends React.Component {
 
   onClick = async (id) => {
     const queryData = await getProductsFromCategoryAndQuery(id);
-    // console.log(queryData);
     this.setState({ queryData: queryData.results });
   }
 
@@ -52,7 +52,11 @@ class Home extends React.Component {
   renderCards = () => {
     const { queryData } = this.state;
     const data = queryData;
-    return data.map((item) => <CardItem key={ item.id } data={ item } />);
+    return data.map((item) => (<CardItem
+      key={ item.id }
+      data={ item }
+      onClick={ this.saveToCart }
+    />));
   }
 
   handleInput = (e) => {
@@ -61,8 +65,21 @@ class Home extends React.Component {
     });
   }
 
+  saveToCart = (newCartItemData) => {
+    if (!JSON.parse(localStorage.getItem('cartItems'))) {
+      localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+    const getCartData = () => JSON.parse(localStorage.getItem('cartItems'));
+    const existingCartData = getCartData();
+    const updatedCart = [...existingCartData, newCartItemData];
+    this.setState({ cartItems: updatedCart.length });
+    const saveCartData = () => localStorage
+      .setItem('cartItems', JSON.stringify(updatedCart));
+    saveCartData();
+  }
+
   render() {
-    const { inputSearch, queryData } = this.state;
+    const { inputSearch, queryData, cartItems } = this.state;
     return (
       <div>
         <input
@@ -81,6 +98,9 @@ class Home extends React.Component {
         <Link to="/cart" data-testid="shopping-cart-button">
           Cart
         </Link>
+        <span data-testid="shopping-cart-size">
+          {cartItems}
+        </span>
         <div>{this.renderCategories()}</div>
         { queryData.length ? this.renderCards() : <p>Nenhum produto foi encontrado</p> }
         <p data-testid="home-initial-message">
