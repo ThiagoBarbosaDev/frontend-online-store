@@ -61,8 +61,6 @@ class ItemDetails extends React.Component {
   handleClick = () => {
     const { email, description, rating } = this.state;
     this.setState((prvState) => ({
-      email: '',
-      description: '',
       reviewData: [...prvState.reviewData, {
         email,
         description,
